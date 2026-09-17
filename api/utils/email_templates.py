@@ -1,14 +1,17 @@
+import os
+DEFAULT_MINISTRY_EMAIL = os.getenv("MINISTRY_EMAIL", "ministry@example.gov.in")
+
 MINISTRY_EMAILS = {
-    "ministry_of_information_and_broadcasting": "j12@bmsit.in",
-    "ministry_of_finance": "j12@bmsit.in",
-    "ministry_of_parliamentary_affairs": "j12@bmsit.in",
-    "ministry_of_law_and_justice": "j12@bmsit.in",
-    "ministry_of_home_affairs": "j12@bmsit.in",
-    "ministry_of_culture": "j12@bmsit.in",
-    "ministry_of_youth_affairs_and_sports": "j12@bmsit.in",
-    "ministry_of_science_and_technology": "j12@bmsit.in",
-    "ministry_of_external_affairs": "j12@bmsit.in",
-    "ministry_of_electronics_and_information_technology": "j12@bmsit.in",
+    "ministry_of_information_and_broadcasting": DEFAULT_MINISTRY_EMAIL,
+    "ministry_of_finance": DEFAULT_MINISTRY_EMAIL,
+    "ministry_of_parliamentary_affairs": DEFAULT_MINISTRY_EMAIL,
+    "ministry_of_law_and_justice": DEFAULT_MINISTRY_EMAIL,
+    "ministry_of_home_affairs": DEFAULT_MINISTRY_EMAIL,
+    "ministry_of_culture": DEFAULT_MINISTRY_EMAIL,
+    "ministry_of_youth_affairs_and_sports": DEFAULT_MINISTRY_EMAIL,
+    "ministry_of_science_and_technology": DEFAULT_MINISTRY_EMAIL,
+    "ministry_of_external_affairs": DEFAULT_MINISTRY_EMAIL,
+    "ministry_of_electronics_and_information_technology": DEFAULT_MINISTRY_EMAIL,
 }
 
 EMAIL_SUBJECTS = {
