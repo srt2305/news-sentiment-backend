@@ -1,39 +1,47 @@
-## References:
+# NewsGovInsights — Backend
 
-- [FastAPI Docs](https://fastapi.tiangolo.com/)
-- [Docker Docs](https://docs.docker.com/)
+FastAPI service that monitors news coverage of government ministries.
+It crawls configured news sources, classifies each article by ministry,
+scores its sentiment, and surfaces flagged articles through a dashboard
+API and email alerts.
 
-## TODO
-- [ ] Finalise the model of the Article data, what exactly to be stored.
-- [ ] fill it with dump data
-- [ ] Design the API endpoints
-- [ ] Write the API endpoints
+## How it works
 
-## Frontend:
-- [ ] A single page for browsing the articles, like a blog with filters and search maybe.
-- [ ] a page to display each article with different details and actions.
-- [ ] login page
-- [ ] implementation of the login page with the backend.
-- [ ] implementation of the article page with the backend.
-- [ ] implementation of the article list page with the backend.
+1. **Source profiles** — news sources are configured in the database
+   (base URL, language, crawling strategy) and seeded via `insert.sql`.
+2. **Crawling & extraction** — scheduled crawls pull articles; a single
+   article can also be submitted by URL.
+3. **Classification** — a fine-tuned **DistilBERT** model maps each
+   article to the relevant ministry.
+4. **Sentiment** — a fine-tuned **RoBERTa** model scores public
+   perception as positive, neutral or negative.
+5. **Alerting** — flagged articles trigger email notifications.
 
+## Stack
 
-### To Run
+- **API**: FastAPI, Uvicorn
+- **ML**: HuggingFace Transformers (TensorFlow), models fine-tuned and
+  hosted on the HuggingFace Hub
+- **Database**: PostgreSQL via SQLAlchemy
+- **Crawling**: BeautifulSoup4, crawl4ai
+- **Email**: Brevo
+- **Deployment**: Docker
 
-```bash
-docker build -t fastapi-example .
-docker run -d -p 8000:8000 fastapi-example
-```
+## Layout
 
-OR
+api/
+├── main.py          # app entrypoint
+├── ml_models.py     # loads the fine-tuned classifier + sentiment models
+├── scheduler.py     # scheduled crawl jobs
+├── database.py      # SQLAlchemy session
+├── routers/         # articles, dashboard, detector, emails, profiles, trigger
+└── utils/           # crawl pipelines, extraction, prediction, templates
 
-```bash
-pip install -r requirements.txt
-uvicorn api.main:app --host 0.0.0.0 --port 8000
-```
+## Running locally
 
-The expose with Ngrok (google it and log in then see the setup steps)
+Set `DATABASE_URL`, `HF_TOKEN`, `BREVO_API_KEY`, `FROM_EMAIL` in a `.env`, then:
 
-```bash
-ngrok http 8000
-```
+docker build -t news-sentiment-backend .
+docker run -d -p 8000:8000 --env-file .env news-sentiment-backend
+
+Docs at `http://localhost:8000/docs`.
